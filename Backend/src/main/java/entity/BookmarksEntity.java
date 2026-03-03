@@ -1,29 +1,34 @@
 package entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "bookmarks")
 public class BookmarksEntity extends BaseEntity{
-    private String userId; // FK
-    private String postId; // FK
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", nullable = false)
+    private PostEntity post;
+
     private String bookmarkListName; //name of the list, the article will be added to
 
-    public String getUserId() {
-        return userId;
+    public UserEntity getUser() {
+        return user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
-    public String getPostId() {
-        return postId;
+    public PostEntity getPost() {
+        return post;
     }
 
-    public void setPostId(String postId) {
-        this.postId = postId;
+    public void setPost(PostEntity post) {
+        this.post = post;
     }
 
     public String getBookmarkListName() {

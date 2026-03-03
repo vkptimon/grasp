@@ -1,12 +1,10 @@
 package entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -14,13 +12,29 @@ import java.util.List;
 public class PostEntity extends BaseEntity{
     @Column(nullable = false)
     private String title;
+    @Column(nullable = false, unique = true)
+    private String slug;
+    @Column(columnDefinition = "TEXT")
     private String description;
-    private String authorId; // should be referred from the UserEntity
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", nullable = false)
+    private UserEntity author;
+
     private Integer estTimeToRead; // 'x' mins to read for a post
-    private Integer viewCount; // number of impressions for the post
+    private Integer viewCount = 0; // number of impressions for the post
+
+    @Enumerated(EnumType.STRING)
+    private PostStatus status = PostStatus.DRAFT;
+
     @CreatedDate
     @Column(nullable = false)
-    private Date publishedAt; // date the article was published on
+    private Instant publishedAt; // date the article was published on
+
+    @UpdateTimestamp
+    private Instant updatedAt;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommentsEntity> comments;
 
     public String getTitle() {
@@ -31,6 +45,14 @@ public class PostEntity extends BaseEntity{
         this.title = title;
     }
 
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -39,12 +61,12 @@ public class PostEntity extends BaseEntity{
         this.description = description;
     }
 
-    public String getAuthorId() {
-        return authorId;
+    public UserEntity getAuthor() {
+        return author;
     }
 
-    public void setAuthorId(String authorId) {
-        this.authorId = authorId;
+    public void setAuthor(UserEntity author) {
+        this.author = author;
     }
 
     public Integer getEstTimeToRead() {
@@ -63,12 +85,28 @@ public class PostEntity extends BaseEntity{
         this.viewCount = viewCount;
     }
 
-    public Date getPublishedAt() {
+    public PostStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PostStatus status) {
+        this.status = status;
+    }
+
+    public Instant getPublishedAt() {
         return publishedAt;
     }
 
-    public void setPublishedAt(Date publishedAt) {
+    public void setPublishedAt(Instant publishedAt) {
         this.publishedAt = publishedAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public List<CommentsEntity> getComments() {

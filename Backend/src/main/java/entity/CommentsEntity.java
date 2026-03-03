@@ -1,33 +1,38 @@
 package entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "comments")
 public class CommentsEntity extends BaseEntity{
-    private String postId; // FK
-    private String userId; // FK
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", nullable = false)
+    private PostEntity post;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String commentBody; // text type
+    
     @Column(nullable = false)
     private Integer postedAt; // comment posted 'x' mins/days/months ago
 
-    public String getPostId() {
-        return postId;
+    public PostEntity getPost() {
+        return post;
     }
 
-    public void setPostId(String postId) {
-        this.postId = postId;
+    public void setPost(PostEntity post) {
+        this.post = post;
     }
 
-    public String getUserId() {
-        return userId;
+    public UserEntity getUser() {
+        return user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
     public String getCommentBody() {

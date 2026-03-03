@@ -1,8 +1,6 @@
 package entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
@@ -24,9 +22,22 @@ public class UserEntity extends BaseEntity{
     private String description; // bio of sorts, text type
     private String profilePictureUrl; // we need to store the profile picture in a bucket and use it's url to fetch and display
     private Boolean isSubscribedToNewsletter;
+    private Boolean isActive = true;
+    @NotNull
+    @Column(unique = true)
+    private String username;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostEntity> posts;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommentsEntity> comments;
-    private List<FollowInfoEntity> followInfo;
+
+    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FollowEntity> followers;
+
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FollowEntity> following;
 
 
     public String getEmail() {
@@ -93,6 +104,22 @@ public class UserEntity extends BaseEntity{
         isSubscribedToNewsletter = subscribedToNewsletter;
     }
 
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public List<PostEntity> getPosts() {
         return posts;
     }
@@ -109,11 +136,19 @@ public class UserEntity extends BaseEntity{
         this.comments = comments;
     }
 
-    public List<FollowInfoEntity> getFollowInfo() {
-        return followInfo;
+    public List<FollowEntity> getFollowers() {
+        return followers;
     }
 
-    public void setFollowInfo(List<FollowInfoEntity> followInfo) {
-        this.followInfo = followInfo;
+    public void setFollowers(List<FollowEntity> followers) {
+        this.followers = followers;
+    }
+
+    public List<FollowEntity> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(List<FollowEntity> following) {
+        this.following = following;
     }
 }
