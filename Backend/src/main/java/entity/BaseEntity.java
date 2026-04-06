@@ -1,19 +1,27 @@
 package entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
+@MappedSuperclass
 public class BaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private Instant createdAt; // for keeping track of the interactions, the milliseconds need to be trimmed off
+    private Instant createdAt;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.createdAt == null) {
+            this.createdAt = Instant.now().truncatedTo(java.time.temporal.ChronoUnit.SECONDS);
+        } else {
+            this.createdAt = this.createdAt.truncatedTo(java.time.temporal.ChronoUnit.SECONDS);
+        }
+    }
 
     public String getId() {
         return id;
