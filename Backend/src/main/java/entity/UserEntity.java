@@ -22,7 +22,7 @@ public class UserEntity extends BaseEntity{
     private String username;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PostEntity> posts;
+    private List<TopicEntity> posts;
 
     public String getEmail() {
         return email;
@@ -64,11 +64,11 @@ public class UserEntity extends BaseEntity{
         this.username = username;
     }
 
-    public List<PostEntity> getPosts() {
+    public List<TopicEntity> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<PostEntity> posts) {
+    public void setPosts(List<TopicEntity> posts) {
         this.posts = posts;
     }
 }

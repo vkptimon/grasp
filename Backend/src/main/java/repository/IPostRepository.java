@@ -1,19 +1,19 @@
 package repository;
 
-import entity.PostEntity;
+import entity.TopicEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface IPostRepository extends JpaRepository<PostEntity, String> {
+public interface IPostRepository extends JpaRepository<TopicEntity, String> {
     // Find tutorials by topic
-    List<PostEntity> findByTopic(String topic);
+    List<TopicEntity> findByTopic(String topic);
 
     // Find tutorials by author
-    List<PostEntity> findByAuthorId(String authorId);
+    List<TopicEntity> findByAuthorId(String authorId);
 
     // Find published tutorials
-    List<PostEntity> findByStatus(entity.PostStatus status);
+    List<TopicEntity> findByStatus(entity.PostStatus status);
 }

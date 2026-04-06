@@ -2,11 +2,9 @@ package entity;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
-@Table(name = "posts")
-public class PostEntity extends BaseEntity{
+@Table(name = "topics")
+public class TopicEntity extends BaseEntity{
     @Column(nullable = false)
     private String title;
     @Column(nullable = false, unique = true)
